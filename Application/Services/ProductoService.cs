@@ -22,6 +22,22 @@ public class ProductoService : IProductoService
         _Agregarvalidator = validator;
         _ActualizarValidator = actualizarValidator;
     }
+
+    public async Task Activar(int id)
+    {
+        var producto = await _repository.ObtenerPorId(id);
+
+        if (producto == null)
+            throw new Exception("Producto no encontrado");
+
+        if (producto.Activo)
+            throw new Exception("El producto ya está activo");
+
+        producto.Activo = true;
+
+        await _repository.Actualizar(producto);
+    }
+
     public async Task ActualizarProducto(ProductoActualizarDto dto)
     {
         if (dto == null)
@@ -38,10 +54,17 @@ public class ProductoService : IProductoService
         if (productoExistente == null)
             throw new Exception("Producto no encontrado");
 
-        productoExistente.Nombre = dto.Nombre;
-        productoExistente.PrecioVenta = dto.PrecioVenta;
-        productoExistente.StockMinimo = dto.StockMinimo;
-        productoExistente.Activo = dto.Activo;
+        if (dto.Nombre != null)
+            productoExistente.Nombre = dto.Nombre;
+
+        if (dto.PrecioVenta != null)
+            productoExistente.PrecioVenta = dto.PrecioVenta.Value;
+
+        if (dto.StockMinimo != null)
+            productoExistente.StockMinimo = dto.StockMinimo.Value;
+
+        if (dto.Activo != null)
+            productoExistente.Activo = dto.Activo.Value;
 
         await _repository.Actualizar(productoExistente);
     }
@@ -78,7 +101,7 @@ public class ProductoService : IProductoService
             throw new Exception("Producto no encontrado");
 
         await _repository.Eliminar(productoExistente);
-        
+
     }
 
     public async Task<bool> ExisteCodigo(string codigo)
@@ -92,11 +115,11 @@ public class ProductoService : IProductoService
     {
         var query = _repository.Query();
 
-        if(!string.IsNullOrEmpty(producto.Codigo))
+        if (!string.IsNullOrEmpty(producto.Codigo))
             query = query.Where(p => p.Codigo == producto.Codigo);
-        if(!string.IsNullOrEmpty(producto.Nombre))
+        if (!string.IsNullOrEmpty(producto.Nombre))
             query = query.Where(p => p.Nombre.Contains(producto.Nombre));
-        if(producto.Activo != null)
+        if (producto.Activo != null)
             query = query.Where(p => p.Activo == producto.Activo);
 
         return await query.ToListAsync();

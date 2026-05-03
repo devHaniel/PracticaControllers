@@ -7,8 +7,17 @@ public class ProductoActualizarValidator : AbstractValidator<ProductoActualizarD
 {
     public ProductoActualizarValidator()
     {
-        RuleFor(p => p.Nombre).NotEmpty().WithMessage("El nombre no puede estar vacio.")
-                                .MaximumLength(50).WithMessage("Máximo de 50 caracteres");
-        
+        RuleFor(p => p.Nombre)
+        .NotEmpty().WithMessage("El nombre no puede estar vacío.")
+        .MaximumLength(50).WithMessage("Máximo de 50 caracteres")
+        .When(p => p.Nombre != null);
+
+    RuleFor(p => p.PrecioVenta)
+        .GreaterThanOrEqualTo(0).WithMessage("El precio no puede ser negativo")
+        .When(p => p.PrecioVenta != null);
+
+    RuleFor(p => p.StockMinimo)
+        .GreaterThanOrEqualTo(0).WithMessage("Stock mínimo inválido")
+        .When(p => p.StockMinimo != null);
     }
 }

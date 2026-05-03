@@ -16,4 +16,5 @@ public interface IProductoService
     Task EliminarProducto(int id);
 
     Task<bool> ExisteCodigo(string codigo);
+    Task Activar(int id);
 }

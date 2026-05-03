@@ -13,10 +13,13 @@ namespace MyApp.Namespace
     public class ProductoController : ControllerBase
     {
         private readonly IProductoService _service;
+        private readonly IMovimientoService _movimientoService;
 
-        public ProductoController(IProductoService service)
+        public ProductoController(IProductoService service,
+        IMovimientoService movimientoService)
         {
             _service = service;
+            _movimientoService = movimientoService;
         }
 
         [HttpGet("{id:int}")]
@@ -34,6 +37,13 @@ namespace MyApp.Namespace
         public async Task<IActionResult> Obtener([FromQuery] ProductoFiltroDto filtro)
         {
             var result = await _service.Obtener(filtro);
+            return Ok(result);
+        }
+
+        [HttpGet("{id:int}/movimientos")]
+        public async Task<IActionResult> ObtenerMovimientosPorProducto(int id)
+        {
+            var result = await _movimientoService.ObtenerPorIdProducto(id);
             return Ok(result);
         }
 
@@ -68,6 +78,12 @@ namespace MyApp.Namespace
             return NoContent();
         }
 
+        [HttpPatch("{id:int}/activar")]
+        public async Task<IActionResult> Activar(int id)
+        {
+            await _service.Activar(id);
+            return NoContent();
+        }
 
     }
 }

@@ -44,11 +44,17 @@ public class ProductoRepository : IProductoRepository
 
     public async Task Eliminar(Producto producto)
     {
-
         if (producto == null)
-            return;
+            throw new ArgumentNullException("Producto nulo.");
 
-        _dbContext.Productos.Remove(producto);
+        var productoResult = await _dbContext.Productos.FindAsync(producto.Id);
+
+        if (productoResult == null)
+            throw new Exception("Producto no encontrado");
+
+
+        productoResult.Activo = false;
+
         await _dbContext.SaveChangesAsync();
     }
 
