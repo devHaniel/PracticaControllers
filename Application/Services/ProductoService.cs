@@ -1,9 +1,11 @@
 using FluentValidation;
+using GestionProducto.Application.DTOs.Producto;
 using GestionProducto.Application.Interfaces;
 using GestionProducto.Domain.Interfaces;
 using GestionProducto.DTOs;
 using GestionProducto.DTOs.Producto;
 using GestionProducto.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GestionProducto.Application.Services;
 
@@ -86,13 +88,18 @@ public class ProductoService : IProductoService
         return productoExiste;
     }
 
-    public async Task<Producto?> ObtenerPorCodigo(string codigo)
+    public async Task<IEnumerable<Producto>> Obtener(ProductoFiltroDto producto)
     {
-        var productoExiste = await _repository.ObtenerPorCodigo(codigo);
-        if (productoExiste == null)
-            throw new Exception("Producto no encontrado");
+        var query = _repository.Query();
 
-        return productoExiste;
+        if(!string.IsNullOrEmpty(producto.Codigo))
+            query = query.Where(p => p.Codigo == producto.Codigo);
+        if(!string.IsNullOrEmpty(producto.Nombre))
+            query = query.Where(p => p.Nombre.Contains(producto.Nombre));
+        if(producto.Activo != null)
+            query = query.Where(p => p.Activo == producto.Activo);
+
+        return await query.ToListAsync();
     }
 
     public async Task<Producto?> ObtenerPorId(int id)
@@ -104,27 +111,10 @@ public class ProductoService : IProductoService
         return productoExiste;
     }
 
-    public async Task<int> ObtenerStock(int productoId)
-    {
-        var productoExiste = await ObtenerPorId(productoId);
-        if (productoExiste == null)
-            throw new Exception("Producto no encontrado");
-
-        return productoExiste.StockActual;
-    }
-
-    public async Task<IEnumerable<ProdutoDto>> ObtenerTodos()
+    public async Task<IEnumerable<Producto>> ObtenerTodos()
     {
         var productos = await _repository.ObtenerTodos();
 
-        return productos.Select(p => new ProdutoDto
-        {
-            Id = p.Id,
-            Codigo = p.Codigo,
-            Nombre = p.Nombre,
-            PrecioVenta = p.PrecioVenta,
-            StockActual = p.StockActual,
-            Activo = p.Activo
-        });
+        return productos;
     }
 }

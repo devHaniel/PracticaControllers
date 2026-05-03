@@ -58,27 +58,18 @@ public class ProductoRepository : IProductoRepository
     }
 
 
-    public async Task<Producto?> ObtenerPorCodigo(string codigo)
-    {
-        return await _dbContext.Productos.FirstOrDefaultAsync(p => p.Codigo == codigo);
-
-    }
-
     public async Task<Producto?> ObtenerPorId(int id)
     {
         return await _dbContext.Productos.FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public async Task<int> ObtenerStock(int id)
-    {
-        return await _dbContext.Productos
-            .Where(p => p.Id == id)
-            .Select(p => p.StockActual)
-            .FirstOrDefaultAsync();
-    }
-
     public async Task<IEnumerable<Producto>> ObtenerTodos()
     {
         return await _dbContext.Productos.ToListAsync();
+    }
+
+    public IQueryable<Producto> Query()
+    {
+        return _dbContext.Productos;
     }
 }

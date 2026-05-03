@@ -1,3 +1,4 @@
+using GestionProducto.Application.DTOs.Producto;
 using GestionProducto.Application.Interfaces;
 using GestionProducto.DTOs;
 using GestionProducto.DTOs.Producto;
@@ -17,12 +18,6 @@ namespace MyApp.Namespace
         {
             _service = service;
         }
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProdutoDto>>> ObtenerTodos()
-        {
-            var result = await _service.ObtenerTodos();
-            return Ok(result);
-        }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ProdutoDto>> ObtenerPorId(int id)
@@ -32,6 +27,13 @@ namespace MyApp.Namespace
             if (result == null)
                 return NotFound(new { mensaje = "Producto no encontrado" });
 
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Obtener([FromQuery] ProductoFiltroDto filtro)
+        {
+            var result = await _service.Obtener(filtro);
             return Ok(result);
         }
 
@@ -66,22 +68,6 @@ namespace MyApp.Namespace
             return NoContent();
         }
 
-        [HttpGet("{codigo}")]
-        public async Task<ActionResult> ObtenerPorCodigo(string codigo)
-        {
-            var result = await _service.ObtenerPorCodigo(codigo);
 
-            if (result == null)
-                return NotFound(new { mensaje = "Producto no encontrado" });
-
-            return Ok(result);
-        }
-
-        [HttpGet("stock/{id:int}")]
-        public async Task<ActionResult<int>> ObtenerStock(int id)
-        {
-            var stock = await _service.ObtenerStock(id);
-            return Ok(stock);
-        }
     }
 }

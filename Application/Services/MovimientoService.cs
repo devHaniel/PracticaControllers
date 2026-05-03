@@ -4,6 +4,7 @@ using GestionProducto.Domain.Interfaces;
 using GestionProducto.DTOs.Movimiento;
 using GestionProducto.Models;
 using GestionProducto.Models.enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace GestionProducto.Application.Services;
 
@@ -73,21 +74,6 @@ public class MovimientoService : IMovimientoService
         await _repository.Eliminar(movimientoEncontrado);
     }
 
-    public async Task<IEnumerable<Movimiento>> ObtenerPorFecha(DateTime fecha)
-    {
-        if (fecha == DateTime.MinValue)
-            throw new ArgumentException("La fechan no es valida.");
-
-
-        var movimiento = await _repository.ObtenerPorFecha(fecha);
-
-        if (movimiento == null)
-        {
-            throw new Exception("Movimiento no encontrado.");
-        }
-
-        return movimiento;
-    }
 
     public async Task<Movimiento?> ObtenerPorId(int id)
     {
@@ -115,7 +101,7 @@ public class MovimientoService : IMovimientoService
 
     public async Task<IEnumerable<Movimiento>> Obtener(MovimientoFiltroDto filtro)
     {
-        var query = await _repository.ObtenerTodos();
+        var query = _repository.Query();
 
         if (filtro.ProductoId.HasValue)
             query = query.Where(m => m.ProductoId == filtro.ProductoId);
@@ -132,7 +118,7 @@ public class MovimientoService : IMovimientoService
         if (!string.IsNullOrEmpty(filtro.Motivo))
             query = query.Where(m => m.Motivo.Contains(filtro.Motivo));
 
-        return query.ToList();
+        return await query.ToListAsync();
     }
 
     public async Task<IEnumerable<Movimiento>> ObtenerTodos()

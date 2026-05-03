@@ -82,14 +82,6 @@ public class MovimientoRepository : IMovimientoRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Movimiento>> ObtenerPorFecha(DateTime fecha)
-    {
-        return await _dbContext.Movimientos
-        .Include(m => m.Producto)
-        .Where(m => m.Fecha == fecha)
-        .ToListAsync();
-    }
-
     public async Task<Movimiento?> ObtenerPorId(int id)
     {
         return await _dbContext.Movimientos
@@ -105,26 +97,15 @@ public class MovimientoRepository : IMovimientoRepository
         .ToListAsync();
     }
 
-    public async Task<IEnumerable<Movimiento>> ObtenerPorMotivo(string motivo)
-    {
-        return await _dbContext.Movimientos
-        .Include(m => m.Producto)
-        .Where(m => m.Motivo.Contains(motivo))
-        .ToListAsync();
-    }
-
-    public async Task<IEnumerable<Movimiento>> ObtenerPorTIpo(TipoMovimiento tipoMovimiento)
-    {
-        return await _dbContext.Movimientos
-        .Include(m => m.Producto)
-        .Where(m => m.Tipo == tipoMovimiento)
-        .ToListAsync();
-    }
-
     public async Task<IEnumerable<Movimiento>> ObtenerTodos()
     {
         return await _dbContext.Movimientos
         .Include(m => m.Producto)
         .ToListAsync();
+    }
+
+    public IQueryable<Movimiento> Query()
+    {
+        return _dbContext.Movimientos;
     }
 }
