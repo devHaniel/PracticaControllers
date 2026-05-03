@@ -3,6 +3,6 @@ namespace GestionProducto.DTOs.Movimiento;
 
 public class MovimientoActualizarDto
 {
-    public string Motivo {get; set;} = string.Empty;
-    public int Cantidad {get; set;}
+    public int Id {get; set;}
+    public string? Motivo {get; set;} = string.Empty;
 }

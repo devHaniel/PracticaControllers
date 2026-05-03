@@ -1,6 +1,7 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using GestionProducto.Application.Interfaces;
+using GestionProducto.Application.Middlewares;
 using GestionProducto.Application.Services;
 using GestionProducto.Domain.Interfaces;
 using GestionProducto.DTOs.Producto;
@@ -25,9 +26,11 @@ builder.Services.AddSwaggerGen();
 
 // Repositories
 builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
+builder.Services.AddScoped<IMovimientoRepository, MovimientoRepository>();
 
 // Services
 builder.Services.AddScoped<IProductoService, ProductoService>();
+builder.Services.AddScoped<IMovimientoService, MovimientoService>();
 
 // Validators
 builder.Services.AddScoped<IValidator<ProductoAgregarDto>, ProductoAgregarValidator>();
@@ -37,17 +40,38 @@ builder.Services.AddScoped<IValidator<ProductoActualizarDto>, ProductoActualizar
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 
+builder.Services.AddLogging(loggerBuilder =>
+{
+    loggerBuilder.ClearProviders();
+    loggerBuilder.AddConsole();
+});
+
 // Controllers
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(
+            new System.Text.Json.Serialization.JsonStringEnumConverter());
+    });;
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
+}
 // Pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<Middleware>();
+
+app.UseSwagger();
+    app.UseSwaggerUI();
+    
 app.UseHttpsRedirection();
 
 app.MapControllers();

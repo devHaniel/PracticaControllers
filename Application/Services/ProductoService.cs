@@ -44,21 +44,6 @@ public class ProductoService : IProductoService
         await _repository.Actualizar(productoExistente);
     }
 
-    public async Task AgregarStock(int productoId, int cantidad)
-    {
-        var productoExistente = await _repository.ObtenerPorId(productoId);
-
-        if (productoExistente == null)
-            throw new Exception("Producto no encontrado");
-
-        if (cantidad <= 0)
-            throw new ArgumentException("Cantidad debe ser mayor a 0.");
-
-        productoExistente.StockActual += cantidad;
-
-        await _repository.Actualizar(productoExistente);
-    }
-
     public async Task<int> CrearProducto(ProductoAgregarDto producto)
     {
         var result = await _Agregarvalidator.ValidateAsync(producto);
@@ -82,22 +67,6 @@ public class ProductoService : IProductoService
 
     }
 
-    public async Task DisminuirStock(int productoId, int cantidad)
-    {
-        var productoExistente = await _repository.ObtenerPorId(productoId);
-
-        if (productoExistente == null)
-            throw new Exception("Producto no encontrado");
-
-        if (cantidad < 0)
-            throw new ArgumentException("Cantidad debe ser mayor a 0.");
-        if (cantidad > productoExistente.StockActual)
-            throw new ArgumentException("Stock insuficiente.");
-
-        productoExistente.StockActual -= cantidad;
-
-        await _repository.Actualizar(productoExistente);
-    }
 
     public async Task EliminarProducto(int id)
     {
@@ -154,7 +123,8 @@ public class ProductoService : IProductoService
             Codigo = p.Codigo,
             Nombre = p.Nombre,
             PrecioVenta = p.PrecioVenta,
-            StockActual = p.StockActual
+            StockActual = p.StockActual,
+            Activo = p.Activo
         });
     }
 }

@@ -68,6 +68,9 @@
 /home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/NuGet.ProjectModel.dll
 /home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/NuGet.Protocol.dll
 /home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/NuGet.Versioning.dll
+/home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/Swashbuckle.AspNetCore.Swagger.dll
+/home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerUI.dll
 /home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/System.ClientModel.dll
 /home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/System.CodeDom.dll
 /home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/System.Composition.AttributedModel.dll
@@ -258,6 +261,7 @@
 /home/hanielh/Documentos/ApiProductosStock/GestionProducto/obj/Debug/net10.0/GestionProducto.csproj.CoreCompileInputs.cache
 /home/hanielh/Documentos/ApiProductosStock/GestionProducto/obj/Debug/net10.0/GestionProducto.MvcApplicationPartsAssemblyInfo.cs
 /home/hanielh/Documentos/ApiProductosStock/GestionProducto/obj/Debug/net10.0/GestionProducto.MvcApplicationPartsAssemblyInfo.cache
+/home/hanielh/Documentos/ApiProductosStock/GestionProducto/obj/Debug/net10.0/GestionProducto.sourcelink.json
 /home/hanielh/Documentos/ApiProductosStock/GestionProducto/obj/Debug/net10.0/rjimswa.dswa.cache.json
 /home/hanielh/Documentos/ApiProductosStock/GestionProducto/obj/Debug/net10.0/rjsmrazor.dswa.cache.json
 /home/hanielh/Documentos/ApiProductosStock/GestionProducto/obj/Debug/net10.0/rjsmcshtml.dswa.cache.json
@@ -273,6 +277,14 @@
 /home/hanielh/Documentos/ApiProductosStock/GestionProducto/obj/Debug/net10.0/GestionProducto.pdb
 /home/hanielh/Documentos/ApiProductosStock/GestionProducto/obj/Debug/net10.0/GestionProducto.genruntimeconfig.cache
 /home/hanielh/Documentos/ApiProductosStock/GestionProducto/obj/Debug/net10.0/ref/GestionProducto.dll
-/home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/Swashbuckle.AspNetCore.Swagger.dll
-/home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerGen.dll
-/home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+/home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/publish/web.config
+/home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/publish/appsettings.json
+/home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/publish/GestionProducto.deps.json
+/home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/publish/GestionProducto.runtimeconfig.json
+/home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/publish/GestionProducto.staticwebassets.endpoints.json
+/home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/publish/publish/web.config
+/home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/publish/appsettings.Development.json
+/home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/publish/publish/appsettings.json
+/home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/publish/publish/GestionProducto.deps.json
+/home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/publish/publish/GestionProducto.runtimeconfig.json
+/home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/publish/publish/GestionProducto.staticwebassets.endpoints.json

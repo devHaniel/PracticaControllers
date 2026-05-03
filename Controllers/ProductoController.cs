@@ -51,9 +51,10 @@ namespace MyApp.Namespace
             );
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Actualizar([FromBody] ProductoActualizarDto dto)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Actualizar(int id, [FromBody] ProductoActualizarDto dto)
         {
+            dto.Id = id;
             await _service.ActualizarProducto(dto);
             return NoContent();
         }
@@ -65,7 +66,7 @@ namespace MyApp.Namespace
             return NoContent();
         }
 
-        [HttpGet("codigo/{codigo}")]
+        [HttpGet("{codigo}")]
         public async Task<ActionResult> ObtenerPorCodigo(string codigo)
         {
             var result = await _service.ObtenerPorCodigo(codigo);
@@ -82,27 +83,5 @@ namespace MyApp.Namespace
             var stock = await _service.ObtenerStock(id);
             return Ok(stock);
         }
-
-        [HttpPost("stock/agregar")]
-        public async Task<IActionResult> AgregarStock(int productoId, int cantidad)
-        {
-            await _service.AgregarStock(productoId, cantidad);
-            return NoContent();
-        }
-
-        [HttpPost("stock/disminuir")]
-        public async Task<IActionResult> DisminuirStock(int productoId, int cantidad)
-        {
-            await _service.DisminuirStock(productoId, cantidad);
-            return NoContent();
-        }
-
-        [HttpGet("existe/{codigo}")]
-        public async Task<ActionResult<bool>> ExisteCodigo(string codigo)
-        {
-            var existe = await _service.ExisteCodigo(codigo);
-            return Ok(existe);
-        }
-
     }
 }

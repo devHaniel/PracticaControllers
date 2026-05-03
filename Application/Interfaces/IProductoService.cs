@@ -15,8 +15,6 @@ public interface IProductoService
     Task EliminarProducto(int id);
 
     Task<int> ObtenerStock(int productoId);
-    Task AgregarStock(int productoId, int cantidad);
-    Task DisminuirStock(int productoId, int cantidad);
 
     Task<bool> ExisteCodigo(string codigo);
 }
