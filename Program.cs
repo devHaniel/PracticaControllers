@@ -93,10 +93,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// Authorization
-builder.Services.AddAuthorization();
-
-
 
 builder.Services.AddLogging(loggerBuilder =>
 {
@@ -121,19 +117,15 @@ using (var scope = app.Services.CreateScope())
 
 app.UseRateLimiter();
 
-// Pipeline
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
 app.UseMiddleware<Middleware>();
 
 app.UseSwagger();
     app.UseSwaggerUI();
     
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
