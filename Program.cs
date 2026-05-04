@@ -1,14 +1,18 @@
+using System.Text;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using GestionProducto.Application.Interfaces;
 using GestionProducto.Application.Middlewares;
 using GestionProducto.Application.Services;
+using GestionProducto.Application.Validators.Usuario;
 using GestionProducto.Domain.Interfaces;
 using GestionProducto.DTOs.Producto;
 using GestionProducto.Infra.Persistence;
 using GestionProducto.Infra.Repositories;
 using GestionProducto.Validators.Producto;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,20 +29,58 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Repositories
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IRolRepository, RolRepository>();
 builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
 builder.Services.AddScoped<IMovimientoRepository, MovimientoRepository>();
 
 // Services
 builder.Services.AddScoped<IProductoService, ProductoService>();
 builder.Services.AddScoped<IMovimientoService, MovimientoService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IRolService, RolService>();
 
 // Validators
 builder.Services.AddScoped<IValidator<ProductoAgregarDto>, ProductoAgregarValidator>();
 builder.Services.AddScoped<IValidator<ProductoActualizarDto>, ProductoActualizarValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UsuarioCrearValidator>();
 
 // FluentValidation auto integration
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
+
+// Seguridad
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<IJwtService, JwtService>();
+
+// JWT Config
+var key = builder.Configuration["Jwt:Key"];
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(key!)
+            )
+        };
+    });
+
+// Authorization
+builder.Services.AddAuthorization();
+
+
 
 builder.Services.AddLogging(loggerBuilder =>
 {

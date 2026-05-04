@@ -288,3 +288,5 @@
 /home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/publish/publish/GestionProducto.deps.json
 /home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/publish/publish/GestionProducto.runtimeconfig.json
 /home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/publish/publish/GestionProducto.staticwebassets.endpoints.json
+/home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/BCrypt.Net-Next.dll
+/home/hanielh/Documentos/ApiProductosStock/GestionProducto/bin/Debug/net10.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll

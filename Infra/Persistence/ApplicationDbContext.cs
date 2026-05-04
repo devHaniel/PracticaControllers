@@ -1,3 +1,4 @@
+using GestionProducto.Domain;
 using GestionProducto.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,12 +13,90 @@ public class ApplicationDbContext : DbContext
 
     }
 
+    public DbSet<Usuario> Usuarios => Set<Usuario>();
+    public DbSet<Rol> Roles => Set<Rol>();
+    public DbSet<UsuarioRol> UsuarioRoles => Set<UsuarioRol>();
+
     public DbSet<Producto> Productos { get; set; }
     public DbSet<Movimiento> Movimientos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        // Usuario
+        modelBuilder.Entity<Usuario>(entity =>
+        {
+            entity.HasKey(u => u.Id);
+
+            entity.Property(u => u.Nombre)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            entity.Property(u => u.Email)
+                .IsRequired()
+                .HasMaxLength(150);
+
+            entity.HasIndex(u => u.Email)
+                .IsUnique();
+
+            entity.Property(u => u.PasswordHash)
+                .IsRequired();
+
+            entity.Property(u => u.Activo)
+                .HasDefaultValue(true);
+
+            entity.Property(u => u.FechaCreacion)
+                .HasDefaultValueSql("GETDATE()");
+
+            entity.Property<DateTime>("CreateAt")
+        .IsRequired()
+        .HasDefaultValueSql("GETUTCDATE()");
+            entity.Property<DateTime>("UpdatedAt")
+            .IsRequired()
+            .HasDefaultValueSql("GETUTCDATE()");
+        });
+
+        // Rol
+        modelBuilder.Entity<Rol>(entity =>
+        {
+            entity.HasKey(r => r.Id);
+
+            entity.Property(r => r.Nombre)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            entity.HasIndex(r => r.Nombre)
+                .IsUnique();
+
+            entity.Property<DateTime>("CreateAt")
+        .IsRequired()
+        .HasDefaultValueSql("GETUTCDATE()");
+            entity.Property<DateTime>("UpdatedAt")
+            .IsRequired()
+            .HasDefaultValueSql("GETUTCDATE()");
+        });
+
+        // UsuarioRol (muchos a muchos manual)
+        modelBuilder.Entity<UsuarioRol>(entity =>
+        {
+            entity.HasKey(ur => new { ur.UsuarioId, ur.RolId });
+
+            entity.HasOne(ur => ur.Usuario)
+                .WithMany(u => u.UsuarioRoles)
+                .HasForeignKey(ur => ur.UsuarioId);
+
+            entity.HasOne(ur => ur.Rol)
+                .WithMany(r => r.UsuarioRoles)
+                .HasForeignKey(ur => ur.RolId);
+
+            entity.Property<DateTime>("CreateAt")
+        .IsRequired()
+        .HasDefaultValueSql("GETUTCDATE()");
+            entity.Property<DateTime>("UpdatedAt")
+            .IsRequired()
+            .HasDefaultValueSql("GETUTCDATE()");
+        });
 
         // Tabla Producto
         modelBuilder.Entity<Producto>(entity =>
