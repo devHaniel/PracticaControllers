@@ -195,16 +195,14 @@ public class ApplicationDbContext : DbContext
 
     private void UpdateTimestamps()
     {
-        // detectar que elementos se modifican
         var entries = ChangeTracker.Entries()
-        .Where(e => e.State == EntityState.Modified);
-
+            .Where(e => e.State == EntityState.Modified || e.State == EntityState.Added);
 
         foreach (var entry in entries)
         {
-            // buscar un campo en la BD
             if (entry.Metadata.FindProperty("UpdatedAt") != null)
                 entry.Property("UpdatedAt").CurrentValue = DateTime.UtcNow;
+
             if (entry.State == EntityState.Added)
             {
                 if (entry.Metadata.FindProperty("CreateAt") != null)

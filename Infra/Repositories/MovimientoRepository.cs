@@ -9,12 +9,10 @@ namespace GestionProducto.Infra.Repositories;
 public class MovimientoRepository : IMovimientoRepository
 {
     private readonly ApplicationDbContext _dbContext;
-    private readonly IProductoRepository _productoRepository;
 
-    public MovimientoRepository(ApplicationDbContext context, IProductoRepository productoRepository)
+    public MovimientoRepository(ApplicationDbContext context)
     {
         _dbContext = context;
-        _productoRepository = productoRepository;
     }
     public async Task Actualizar(Movimiento movimiento)
     {
@@ -36,41 +34,11 @@ public class MovimientoRepository : IMovimientoRepository
 
     public async Task Agregar(Movimiento movimiento)
     {
+        if (movimiento == null)
+            throw new ArgumentNullException("Movimiento nulo.");
 
-        using var tranc = await _dbContext.Database.BeginTransactionAsync();
-
-        try
-        {
-            var producto = await _productoRepository.ObtenerPorId(movimiento.ProductoId);
-
-            if (producto == null)
-                throw new Exception("Producto no encontrado");
-
-            if(movimiento.Tipo == TipoMovimiento.Entrada)
-                producto.StockActual += movimiento.Cantidad;
-            else if(movimiento.Tipo == TipoMovimiento.Salida)
-            {
-                if(producto.StockActual < movimiento.Cantidad)
-                    throw new Exception("Stock insuficiente");
-
-                producto.StockActual -= movimiento.Cantidad;
-
-            }
-            
-            await _dbContext.Movimientos.AddAsync(movimiento);
-
-            await _productoRepository.Actualizar(producto);
-            
-            // Confirmar todo junto
-            await _dbContext.SaveChangesAsync();
-
-            await tranc.CommitAsync();
-
-        }catch
-        {
-            await tranc.RollbackAsync();
-            throw;
-        }
+        await _dbContext.Movimientos.AddAsync(movimiento);
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task Eliminar(Movimiento movimiento)

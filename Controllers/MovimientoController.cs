@@ -18,14 +18,17 @@ public class MovimientosController : ControllerBase
         _movimientoService = movimientoService;
     }
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Movimiento>> ObtenerPorId(int id)
+    public async Task<ActionResult<MovimientoDto>> ObtenerPorId(int id)
     {
         var movimiento = await _movimientoService.ObtenerPorId(id);
+        if (movimiento == null)
+            return NotFound(new { mensaje = "Movimiento no encontrado." });
+
         return Ok(movimiento);
     }
 
     [HttpGet("producto/{id:int}")]
-    public async Task<ActionResult<IEnumerable<Movimiento>>> ObtenerPorProducto(int id)
+    public async Task<ActionResult<IEnumerable<MovimientoDto>>> ObtenerPorProducto(int id)
     {
         var movimientos = await _movimientoService.ObtenerPorIdProducto(id);
         return Ok(movimientos);

@@ -17,8 +17,14 @@ using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddUserSecrets<Program>(optional: true);
+
 var conexion_string = builder.Configuration.GetConnectionString("DefaultConnection")
-?? throw new InvalidOperationException("Te hace falta la conexion a la bd.");
+    ?? throw new InvalidOperationException("Te hace falta la conexion a la bd. Configura DefaultConnection desde User Secrets o una variable de entorno.");
+
+var jwtKey = builder.Configuration["Jwt:Key"];
+if (string.IsNullOrWhiteSpace(jwtKey))
+    throw new InvalidOperationException("Te hace falta la clave JWT. Configura Jwt:Key desde User Secrets o una variable de entorno.");
 
 // DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -88,7 +94,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = builder.Configuration["Jwt:Audience"],
 
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(key!)
+                Encoding.UTF8.GetBytes(jwtKey)
             )
         };
     });

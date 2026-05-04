@@ -1,6 +1,5 @@
 using GestionProducto.Application.DTOs.Producto;
 using GestionProducto.Application.Interfaces;
-using GestionProducto.DTOs;
 using GestionProducto.DTOs.Producto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +22,7 @@ namespace MyApp.Namespace
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<ProdutoDto>> ObtenerPorId(int id)
+        public async Task<ActionResult<ProductoDto>> ObtenerPorId(int id)
         {
             var result = await _service.ObtenerPorId(id);
 
