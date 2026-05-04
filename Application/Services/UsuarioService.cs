@@ -84,7 +84,10 @@ public class UsuarioService : IUsuarioService
         );
 
         if (!passwordValida)
+        {
+            await Task.Delay(1000);
             throw new Exception("Credenciales incorrectas.");
+        }
 
         var roles = usuario.UsuarioRoles
             .Select(ur => ur.Rol.Nombre)

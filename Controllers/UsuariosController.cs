@@ -3,6 +3,7 @@ using GestionProducto.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace MyApp.Namespace
 {
@@ -27,6 +28,7 @@ public class UsuariosController : ControllerBase
     }
 
     [HttpPost("login")]
+    [EnableRateLimiting("LoginPolicy")]
     [AllowAnonymous]
     public async Task<IActionResult> Login(LoginDto dto)
     {
